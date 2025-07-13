@@ -14,15 +14,15 @@ from scripts.data_clean_utils import perform_data_cleaning
 set_config(transform_output='pandas')
 
 # initialize dagshub
-import dagshub
+# import dagshub
 import mlflow.client
 
-dagshub.init(repo_owner='himanshu1703', 
-             repo_name='swiggy-delivery-time-prediction', 
-             mlflow=True)
+import dagshub
+dagshub.init(repo_owner='Debopam-Chowdhury', repo_name='Swiggy-Delivery-Time-Prediction', mlflow=True)
 
 # set the mlflow tracking server
-mlflow.set_tracking_uri("https://dagshub.com/himanshu1703/swiggy-delivery-time-prediction.mlflow")
+mlflow.set_tracking_uri("https://dagshub.com/Debopam-Chowdhury/Swiggy-Delivery-Time-Prediction.mlflow")
+
 
 
 class Data(BaseModel):  
@@ -84,7 +84,7 @@ client = MlflowClient()
 model_name = load_model_information("run_information.json")['model_name']
 
 # stage of the model
-stage = "Production"
+stage = "Staging"
 
 # get the latest model version
 # latest_model_ver = client.get_latest_versions(name=model_name,stages=[stage])
@@ -148,4 +148,4 @@ def do_predictions(data: Data):
    
    
 if __name__ == "__main__":
-    uvicorn.run(app="app:app",host="0.0.0.0",port=8000)
+    uvicorn.run(app="app:app")
