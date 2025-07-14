@@ -25,7 +25,7 @@ model_name = load_model_information("run_information.json")["model_name"]
 
 
 @pytest.mark.parametrize(argnames="model_name, stage",
-                         argvalues=[(model_name, "Staging")])
+                         argvalues=[(model_name, "Production")])
 def test_load_model_from_registry(model_name,stage):
     client = MlflowClient()
     latest_versions = client.get_latest_versions(name=model_name,stages=[stage])
