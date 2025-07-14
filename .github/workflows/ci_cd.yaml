@@ -70,7 +70,7 @@ jobs:
           IMAGE_TAG: latest
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker push $REGISTRY/swiggy-food-delivery:$IMAGE_TAG
 
       
       # # Zip the required files
