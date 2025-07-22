@@ -8,7 +8,9 @@ import json
 import joblib
 from mlflow import MlflowClient
 from sklearn import set_config
-from scripts.data_clean_utils import perform_data_cleaning
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.requests import Request
 
 # set the output as pandas
 set_config(transform_output='pandas')
@@ -26,25 +28,21 @@ mlflow.set_tracking_uri("https://dagshub.com/Debopam-Chowdhury/Swiggy-Delivery-T
 
 
 class Data(BaseModel):  
-    ID: str
-    Delivery_person_ID: str
-    Delivery_person_Age: str
-    Delivery_person_Ratings: str
-    Restaurant_latitude: float
-    Restaurant_longitude: float
-    Delivery_location_latitude: float
-    Delivery_location_longitude: float
-    Order_Date: str
-    Time_Orderd: str
-    Time_Order_picked: str
-    Weatherconditions: str
-    Road_traffic_density: str
-    Vehicle_condition: int
-    Type_of_order: str
-    Type_of_vehicle: str
-    multiple_deliveries: str
-    Festival: str
-    City: str
+    age: float
+    ratings: float
+    weather: str
+    traffic: str
+    vehicle_condition: int
+    type_of_order: str
+    type_of_vehicle: str
+    multiple_deliveries: float
+    festival: str
+    city_type: str
+    is_weekend: int
+    pickup_time_minutes: float
+    order_time_of_day: str
+    distance: float
+    distance_type: str
 
     
     
@@ -109,43 +107,49 @@ model_pipe = Pipeline(steps=[
 # create the app
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
+
 # create the home endpoint
-@app.get(path="/")
-def home():
-    return "Welcome to the Swiggy Food Delivery Time Prediction App"
+# @app.get(path="/")
+# def home():
+#     return "Welcome to the Swiggy Food Delivery Time Prediction App"
+
+@app.get("/", response_class=None)
+def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 # create the predict endpoint
 @app.post(path="/predict")
 def do_predictions(data: Data):
     pred_data = pd.DataFrame({
-        'ID': data.ID,
-        'Delivery_person_ID': data.Delivery_person_ID,
-        'Delivery_person_Age': data.Delivery_person_Age,
-        'Delivery_person_Ratings': data.Delivery_person_Ratings,
-        'Restaurant_latitude': data.Restaurant_latitude,
-        'Restaurant_longitude': data.Restaurant_longitude,
-        'Delivery_location_latitude': data.Delivery_location_latitude,
-        'Delivery_location_longitude': data.Delivery_location_longitude,
-        'Order_Date': data.Order_Date,
-        'Time_Orderd': data.Time_Orderd,
-        'Time_Order_picked': data.Time_Order_picked,
-        'Weatherconditions': data.Weatherconditions,
-        'Road_traffic_density': data.Road_traffic_density,
-        'Vehicle_condition': data.Vehicle_condition,
-        'Type_of_order': data.Type_of_order,
-        'Type_of_vehicle': data.Type_of_vehicle,
+        'age': data.age,
+        'ratings': data.ratings,
+        'weather': data.weather,
+        'traffic': data.traffic,
+        'vehicle_condition': data.vehicle_condition,
+        'type_of_order': data.type_of_order,
+        'type_of_vehicle': data.type_of_vehicle,
         'multiple_deliveries': data.multiple_deliveries,
-        'Festival': data.Festival,
-        'City': data.City
+        'festival': data.festival,
+        'city_type': data.city_type,
+        'is_weekend': int(data.is_weekend),
+        'pickup_time_minutes': data.pickup_time_minutes,
+        'order_time_of_day': data.order_time_of_day,
+        'distance': data.distance,
+        'distance_type': data.distance_type
         },index=[0]
     )
     # clean the raw input data
-    cleaned_data = perform_data_cleaning(pred_data)
+    # cleaned_data = perform_data_cleaning(pred_data)
     # get the predictions
-    predictions = model_pipe.predict(cleaned_data)[0]
+    predictions = model_pipe.predict(pred_data)[0]
 
-    return predictions
+    return {"predicted_delivery_time": round(predictions, 2)}
    
+# @app.get("/", response_class=None)
+# def read_root(request: Request):
+#     return templates.TemplateResponse("index.html", {"request": request})
    
 if __name__ == "__main__":
-    uvicorn.run(app="app:app", host = "0.0.0.0", port = 8000)
+    uvicorn.run(app="app:app")

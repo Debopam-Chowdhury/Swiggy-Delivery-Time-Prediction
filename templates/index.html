@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Swiggy Delivery Time Predictor</title>
+    <style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #1e1e2f, #2c3e50);
+        color: #f0f0f0;
+        padding: 40px;
+        animation: fadeInBody 1s ease-in;
+    }
+
+    h1 {
+        color: #00c3ff;
+        text-align: center;
+        margin-bottom: 30px;
+        animation: slideInTop 0.8s ease-out;
+    }
+
+    form {
+        max-width: 600px;
+        margin: auto;
+        background: #2b2f3a;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0, 195, 255, 0.2);
+        animation: fadeInCard 1s ease;
+    }
+
+    label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
+        color: #ddd;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border-radius: 6px;
+        border: 1px solid #444;
+        background-color: #3c4352;
+        color: #f5f5f5;
+        transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus {
+        outline: none;
+        border-color: #00c3ff;
+        box-shadow: 0 0 5px rgba(0, 195, 255, 0.4);
+    }
+
+    button {
+        margin-top: 25px;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #00c3ff, #007bff);
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.4s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+        background: linear-gradient(135deg, #007bff, #00c3ff);
+        transform: scale(1.03);
+    }
+
+    #result {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 20px;
+        color: #00c3ff;
+        animation: fadeInResult 1s ease;
+    }
+
+    #loading-spinner {
+        display: none;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .loader {
+        border: 6px solid #444;
+        border-top: 6px solid #00c3ff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeInBody {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideInTop {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInCard {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeInResult {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
+
+</head>
+<body>
+    <h1>Swiggy Delivery Time Predictor</h1>
+<form id="predict-form">
+    <label for="age">Age:</label>
+    <input type="number" name="age" required>
+
+    <label for="ratings">Ratings:</label>
+    <input type="number" step="0.1" name="ratings" min="0" max="5" required>
+
+    <label for="weather">Weather:</label>
+    <select name="weather" required>
+        <option value="sunny">Sunny</option>
+        <option value="stormy">Stormy</option>
+        <option value="sandstorms">Sandstorms</option>
+        <option value="cloudy">Cloudy</option>
+        <option value="fog">Fog</option>
+        <option value="windy">Windy</option>
+    </select>
+
+    <label for="traffic">Traffic:</label>
+    <select name="traffic" required>
+        <option value="high">High</option>
+        <option value="jam">Jam</option>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+    </select>
+
+    <label for="vehicle_condition">Vehicle Condition(0 is best, 3 is worst):</label>
+    <input type="number" name="vehicle_condition" min="0" max="3" step="1" required>
+
+
+    <label for="type_of_order">Type of Order:</label>
+    <select name="type_of_order" required>
+        <option value="snack">Snack</option>
+        <option value="drinks">Drinks</option>
+        <option value="buffet">Buffet</option>
+        <option value="meal">Meal</option>
+    </select>
+
+    <label for="type_of_vehicle">Type of Vehicle:</label>
+    <select name="type_of_vehicle" required>
+        <option value="motorcycle">Motorcycle</option>
+        <option value="scooter">Scooter</option>
+        <option value="electric_scooter">Electric Scooter</option>
+        <option value="bicycle">Bicycle</option>
+    </select>
+
+    <label for="multiple_deliveries">Multiple Deliveries (0, 1, 2, 3):</label>
+    <select name="multiple_deliveries" required>
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+    </select>
+
+    <label for="festival">Festival:</label>
+    <select name="festival" required>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+    </select>
+
+    <label for="city_type">City Type:</label>
+    <select name="city_type" required>
+        <option value="urban">Urban</option>
+        <option value="metropolitian">Metropolitian</option>
+        <option value="semi-urban">Semi-Urban</option>
+    </select>
+
+    <label for="is_weekend">Is Weekend:</label>
+    <select name="is_weekend" required>
+        <option value="1">Yes</option>
+        <option value="0">No</option>
+    </select>
+
+    <label for="pickup_time_minutes">Pickup Time (minutes):</label>
+    <input type="number" name="pickup_time_minutes" required>
+
+    <label for="order_time_of_day">Order Time of Day:</label>
+    <select name="order_time_of_day" required>
+        <option value="morning">Morning</option>
+        <option value="afternoon">Afternoon</option>
+        <option value="evening">Evening</option>
+        <option value="night">Night</option>
+        <option value="after_midnight">After Midnight</option>
+    </select>
+
+    <label for="distance">Distance in Km(min 0, max 25):</label>
+<input type="number" step="0.1" name="distance" min="0" max="25" id="distance" required>
+
+<label for="distance_type">Distance Type:</label>
+<select id="distance_type_display" disabled>
+    <option value="short">Short</option>
+    <option value="medium">Medium</option>
+    <option value="long">Long</option>
+    <option value="very_long">Very Long</option>
+</select>
+
+<input type="hidden" name="distance_type" id="distance_type">
+
+<script>
+document.getElementById("distance").addEventListener("input", function () {
+    const distance = parseFloat(this.value);
+    let type = "";
+
+    if (!isNaN(distance)) {
+        if (distance >= 0 && distance < 5) {
+            type = "short";
+        } else if (distance >= 5 && distance < 10) {
+            type = "medium";
+        } else if (distance >= 10 && distance < 15) {
+            type = "long";
+        } else if (distance >= 15 && distance < 25) {
+            type = "very_long";
+        }
+    }
+
+    document.getElementById("distance_type_display").value = type;
+    document.getElementById("distance_type").value = type;
+});
+</script>
+
+
+
+
+        <button type="submit">Predict</button>
+    </form>
+
+    <div id="loading-spinner">
+        <div class="loader"></div>
+        <p>Loading...</p>
+    </div>
+
+    <div id="result"></div>
+
+    <script>
+        const form = document.getElementById('predict-form');
+        const spinner = document.getElementById('loading-spinner');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            spinner.style.display = 'block';
+            resultDiv.innerText = '';
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+
+            // Convert numerical fields
+            data.age = parseFloat(data.age);
+            data.ratings = parseFloat(data.ratings);
+            data.vehicle_condition = parseInt(data.vehicle_condition);
+            data.multiple_deliveries = parseFloat(data.multiple_deliveries);
+            data.is_weekend = parseInt(data.is_weekend);
+            data.pickup_time_minutes = parseFloat(data.pickup_time_minutes);
+            data.distance = parseFloat(data.distance);
+
+            try {
+                const response = await fetch("/predict", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if ('predicted_delivery_time' in result) {
+                    resultDiv.innerText = `Predicted Delivery Time: ${result.predicted_delivery_time} minutes`;
+                } else {
+                    resultDiv.innerText = "Prediction failed.";
+                }
+            } catch (error) {
+                resultDiv.innerText = "Error occurred while predicting.";
+            } finally {
+                spinner.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
