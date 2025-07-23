@@ -8,6 +8,8 @@ from sklearn import set_config
 from mlflow import MlflowClient
 import os
 
+app = Flask(__name__, static_folder='static', template_folder='templates')
+
 # Optional: if using Dagshub
 # import dagshub
 # dagshub.init(repo_owner='Debopam-Chowdhury', repo_name='Swiggy-Delivery-Time-Prediction', mlflow=True)
@@ -69,7 +71,7 @@ model_pipe = Pipeline(steps=[
 ])
 
 # ========== Flask App ==========
-app = Flask(__name__, static_folder='static', template_folder='templates')
+# app = Flask(__name__, static_folder='static', template_folder='templates')
 
 @app.route("/", methods=["GET"])
 def index():

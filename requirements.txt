@@ -4,6 +4,5 @@ pydantic
 pandas
 scikit-learn
 joblib
-mlflow
-dagshub
+lightgbm
 jinja2
