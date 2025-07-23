@@ -9,14 +9,14 @@ from mlflow import MlflowClient
 import os
 
 # Optional: if using Dagshub
-import dagshub
-dagshub.init(repo_owner='Debopam-Chowdhury', repo_name='Swiggy-Delivery-Time-Prediction', mlflow=True)
+# import dagshub
+# dagshub.init(repo_owner='Debopam-Chowdhury', repo_name='Swiggy-Delivery-Time-Prediction', mlflow=True)
 
-# Set the output as pandas
-set_config(transform_output='pandas')
+# # Set the output as pandas
+# set_config(transform_output='pandas')
 
-# Set MLflow tracking server
-mlflow.set_tracking_uri("https://dagshub.com/Debopam-Chowdhury/Swiggy-Delivery-Time-Prediction.mlflow")
+# # Set MLflow tracking server
+# mlflow.set_tracking_uri("https://dagshub.com/Debopam-Chowdhury/Swiggy-Delivery-Time-Prediction.mlflow")
 
 # import dagshub
 # dagshub.init(
@@ -48,15 +48,15 @@ nominal_cat_cols = ['weather', 'type_of_order', 'type_of_vehicle',
 ordinal_cat_cols = ["traffic", "distance_type"]
 
 # MLflow Client
-client = MlflowClient()
+# client = MlflowClient()
 
 # Load model name and stage
-model_name = load_model_information("run_information.json")['model_name']
-stage = "Production"
+# model_name = load_model_information("run_information.json")['model_name']
+# stage = "Production"
 
 # Load model path and model
-model_path = f"models:/{model_name}/{stage}"
-model = mlflow.sklearn.load_model(model_path)
+model_path = "models/model.pkl"
+model = load_transformer(model_path)
 
 # Load preprocessor
 preprocessor_path = "models/preprocessor.joblib"
@@ -101,6 +101,6 @@ def predict():
     return jsonify({"predicted_delivery_time": round(predictions, 2)})
 
 if __name__ == "__main__":
-    port = int(os.environ.get(PORT, 4000))  # 4000 for local testing
+    port = int(os.environ.get("PORT", 4000))  # 4000 for local testing
     app.run(host="0.0.0.0", port=port, debug=True)
     # app.run(debug=True)
