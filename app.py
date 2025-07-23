@@ -101,6 +101,6 @@ def predict():
     return jsonify({"predicted_delivery_time": round(predictions, 2)})
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 4000))  # 4000 for local testing
+    port = int(os.environ.get(PORT, 4000))  # 4000 for local testing
     app.run(host="0.0.0.0", port=port, debug=True)
     # app.run(debug=True)
