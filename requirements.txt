@@ -1,5 +1,4 @@
 flask
-uvicorn
 pydantic
 pandas
 scikit-learn

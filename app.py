@@ -1,11 +1,11 @@
 from flask import Flask, request, render_template, jsonify
 from sklearn.pipeline import Pipeline
 import pandas as pd
-import mlflow
+# import mlflow
 import json
 import joblib
-from sklearn import set_config
-from mlflow import MlflowClient
+# from sklearn import set_config
+# from mlflow import MlflowClient
 import os
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
