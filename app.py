@@ -8,26 +8,26 @@ from sklearn import set_config
 from mlflow import MlflowClient
 import os
 
-# # Optional: if using Dagshub
-# import dagshub
-# dagshub.init(repo_owner='Debopam-Chowdhury', repo_name='Swiggy-Delivery-Time-Prediction', mlflow=True)
-
-# # Set the output as pandas
-# set_config(transform_output='pandas')
-
-# # Set MLflow tracking server
-# mlflow.set_tracking_uri("https://dagshub.com/Debopam-Chowdhury/Swiggy-Delivery-Time-Prediction.mlflow")
-
+# Optional: if using Dagshub
 import dagshub
-dagshub.init(
-    repo_owner='Debopam-Chowdhury',
-    repo_name='Swiggy-Delivery-Time-Prediction',
-    mlflow=True,
-    token=os.environ.get("DAGSHUB_TOKEN"),
-    user=os.environ.get("DAGSHUB_USERNAME")
-)
+dagshub.init(repo_owner='Debopam-Chowdhury', repo_name='Swiggy-Delivery-Time-Prediction', mlflow=True)
 
+# Set the output as pandas
+set_config(transform_output='pandas')
+
+# Set MLflow tracking server
 mlflow.set_tracking_uri("https://dagshub.com/Debopam-Chowdhury/Swiggy-Delivery-Time-Prediction.mlflow")
+
+# import dagshub
+# dagshub.init(
+#     repo_owner='Debopam-Chowdhury',
+#     repo_name='Swiggy-Delivery-Time-Prediction',
+#     mlflow=True,
+#     token=os.environ.get("DAGSHUB_TOKEN"),
+#     user=os.environ.get("DAGSHUB_USERNAME")
+# )
+
+# mlflow.set_tracking_uri("https://dagshub.com/Debopam-Chowdhury/Swiggy-Delivery-Time-Prediction.mlflow")
 
 # ========== Load model metadata & transformer ==========
 def load_model_information(file_path):
